@@ -8,7 +8,7 @@ import {
   Search,
   MessageSquare, 
   FilesIcon,
-  FolderOp,
+  Folder,
   Users,
   Shield, 
   AlertTriangle, 
@@ -32,7 +32,7 @@ export const Sidebar = ({ collapsed, setCollapsed }: SidebarProps) => {
   const mainItems: SidebarItem[] = [
     { name: 'Dashboard', path: '/', icon: <Home className="h-5 w-5" /> },
     { name: 'Onboarding', path: '/onboarding', icon: <Users className="h-5 w-5" /> },
-    { name: 'Supply Chain', path: '/supply-chain', icon: <FolderOp className="h-5 w-5" /> },
+    { name: 'Supply Chain', path: '/supply-chain', icon: <Folder className="h-5 w-5" /> },
     { name: 'Risk Scanner', path: '/risk-scanner', icon: <AlertTriangle className="h-5 w-5" /> },
     { name: 'Action Tracker', path: '/action-tracker', icon: <CheckCircle className="h-5 w-5" /> },
     { name: 'Comms Hub', path: '/comms-hub', icon: <MessageSquare className="h-5 w-5" /> },

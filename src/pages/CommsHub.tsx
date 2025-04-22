@@ -1,5 +1,5 @@
 
-import { Message, SendIcon } from "lucide-react";
+import { MessageSquare, SendIcon } from "lucide-react";
 
 const CommsHub = () => {
   return (
@@ -18,7 +18,7 @@ const CommsHub = () => {
           <div className="flex items-center justify-center space-x-8">
             <div className="flex flex-col items-center">
               <div className="h-12 w-12 rounded-full bg-purple-100 flex items-center justify-center mb-2">
-                <Message className="h-6 w-6 text-purple-600" />
+                <MessageSquare className="h-6 w-6 text-purple-600" />
               </div>
               <span className="font-medium">Messaging</span>
             </div>

@@ -58,7 +58,12 @@ export const SdgProgress = () => {
                   {sdg.current}%
                 </span>
               </div>
-              <Progress value={sdg.current} max={sdg.target} className="h-2" indicatorClassName={`bg-[${sdg.color}]`} />
+              <Progress 
+                value={sdg.current} 
+                max={sdg.target} 
+                className="h-2" 
+                style={{ backgroundColor: 'var(--background)', '--progress-value': `${sdg.current}%` }}
+              />
             </div>
           ))}
         </div>
