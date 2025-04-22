@@ -62,7 +62,7 @@ export const SdgProgress = () => {
                 value={sdg.current} 
                 max={sdg.target} 
                 className="h-2" 
-                style={{ backgroundColor: 'var(--background)', '--progress-value': `${sdg.current}%` }}
+                style={{ backgroundColor: 'var(--background)' }}
               />
             </div>
           ))}
