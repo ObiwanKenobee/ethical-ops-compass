@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { AlertTriangle, Check, Clock } from "lucide-react";
 import { Action } from "@/types";
@@ -61,8 +60,8 @@ const ActionTracker = () => {
     // If a partner ID is provided, get the partner name to display
     if (data.partnerId) {
       const partner = dataService.getById('partners', data.partnerId);
-      if (partner) {
-        data.partnerName = partner.name;
+      if (partner && 'name' in partner) {
+        data.partnerName = partner.name as string;
       }
     }
     

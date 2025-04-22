@@ -181,8 +181,8 @@ export function CrudForm<T extends Record<string, any>>({
                         type="date"
                         {...formField}
                         value={
-                          formField.value instanceof Date
-                            ? formField.value.toISOString().split('T')[0]
+                          typeof formField.value === 'string'
+                            ? formField.value.split('T')[0]
                             : formField.value
                         }
                       />

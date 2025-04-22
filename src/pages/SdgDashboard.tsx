@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Globe, Target, BarChart, ArrowUp } from "lucide-react";
 import { SDGGoal, SDGTarget } from "@/types";
@@ -59,7 +58,6 @@ const SdgDashboard = () => {
   };
 
   const handleFormSubmit = (data: SDGGoal) => {
-    // Ensure targets is an array
     const processedData = {
       ...data,
       targets: data.targets || [],
@@ -68,7 +66,6 @@ const SdgDashboard = () => {
     };
     
     if (currentGoal) {
-      // Update existing goal
       const updated = dataService.update<SDGGoal>('sdgGoals', currentGoal.id, processedData);
       if (updated) {
         setSdgGoals(dataService.getAll<SDGGoal>('sdgGoals'));
@@ -78,7 +75,6 @@ const SdgDashboard = () => {
         });
       }
     } else {
-      // Create new goal
       const newGoal = dataService.create<SDGGoal>('sdgGoals', processedData);
       setSdgGoals(dataService.getAll<SDGGoal>('sdgGoals'));
       toast({
@@ -259,7 +255,7 @@ const SdgDashboard = () => {
           ]}
           defaultValues={{
             ...(currentGoal || {}),
-            number: currentGoal?.number || '',
+            number: currentGoal?.number || 0,
             progress: currentGoal?.progress || 0
           }}
           onSubmit={handleFormSubmit}
