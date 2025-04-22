@@ -168,7 +168,7 @@ export const RiskTable = () => {
                 <SelectValue placeholder="All severities" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="">All severities</SelectItem>
+                <SelectItem value="all">All severities</SelectItem>
                 <SelectItem value="high">High</SelectItem>
                 <SelectItem value="medium">Medium</SelectItem>
                 <SelectItem value="low">Low</SelectItem>
