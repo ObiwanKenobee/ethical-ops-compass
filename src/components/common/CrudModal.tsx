@@ -24,7 +24,9 @@ export function CrudModal({
   children,
 }: CrudModalProps) {
   return (
-    <Dialog open={isOpen} onOpenChange={onClose}>
+    <Dialog open={isOpen} onOpenChange={(open) => {
+      if (!open) onClose();
+    }}>
       <DialogContent className="max-w-3xl">
         <DialogHeader>
           <DialogTitle>{title}</DialogTitle>
