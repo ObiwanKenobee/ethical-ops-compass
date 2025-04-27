@@ -10,6 +10,15 @@ import { Skeleton } from "@/components/ui/skeleton";
 // Define types that match what we've seen coming from the database
 type InitiativeStatus = 'active' | 'planned' | 'completed' | 'in_progress' | 'on_hold';
 
+// Define initiative interface
+interface Initiative {
+  id: string;
+  title: string;
+  status: string;
+  started_at?: string;
+  category?: string;
+}
+
 export const RecentInitiatives = () => {
   const { data: initiatives, isLoading } = useQuery({
     queryKey: ['recentInitiatives'],
@@ -44,13 +53,12 @@ export const RecentInitiatives = () => {
   const getBadgeClass = (status: string) => {
     switch (status) {
       case "active":
-        return "bg-green-100 text-green-800";
+      case "in_progress":
+        return "bg-blue-100 text-blue-800";
       case "planned":
         return "bg-blue-100 text-blue-800";
       case "completed":
-        return "bg-gray-100 text-gray-800";
-      case "in_progress":
-        return "bg-blue-100 text-blue-800";
+        return "bg-green-100 text-green-800";
       case "on_hold":
         return "bg-amber-100 text-amber-800";
       default:
@@ -67,7 +75,7 @@ export const RecentInitiatives = () => {
       <CardContent>
         <div className="space-y-4">
           {initiatives && initiatives.length > 0 ? (
-            initiatives.map((initiative) => (
+            initiatives.map((initiative: Initiative) => (
               <div
                 key={initiative.id}
                 className="flex items-center justify-between border-b border-gray-100 pb-3 last:border-0 last:pb-0"
@@ -81,7 +89,7 @@ export const RecentInitiatives = () => {
                 <Badge
                   className={getBadgeClass(initiative.status)}
                 >
-                  {initiative.status}
+                  {initiative.status.replace('_', ' ')}
                 </Badge>
               </div>
             ))

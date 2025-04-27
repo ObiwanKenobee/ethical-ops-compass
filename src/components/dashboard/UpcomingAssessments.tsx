@@ -7,6 +7,16 @@ import { format } from "date-fns";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 
+// Define a type for our assessment with supplier_name
+interface Assessment {
+  id: string;
+  supplier_id: string;
+  assessment_type: string;
+  due_date: string;
+  status: string;
+  supplier_name?: string;
+}
+
 export const UpcomingAssessments = () => {
   const { data: assessments, isLoading } = useQuery({
     queryKey: ['upcomingAssessments'],
@@ -48,6 +58,12 @@ export const UpcomingAssessments = () => {
         return "bg-green-100 text-green-800";
       case "active":
         return "bg-green-100 text-green-800";
+      case "approved":
+        return "bg-green-100 text-green-800";
+      case "at_risk":
+        return "bg-red-100 text-red-800";
+      case "suspended":
+        return "bg-gray-100 text-gray-800";
       default:
         return "bg-gray-100 text-gray-800";
     }
@@ -62,13 +78,13 @@ export const UpcomingAssessments = () => {
       <CardContent>
         <div className="space-y-4">
           {assessments && assessments.length > 0 ? (
-            assessments.map((assessment) => (
+            assessments.map((assessment: Assessment) => (
               <div
                 key={assessment.id}
                 className="flex items-center justify-between border-b border-gray-100 pb-3 last:border-0 last:pb-0"
               >
                 <div className="space-y-1">
-                  <p className="text-sm font-medium">{assessment.supplier_name}</p>
+                  <p className="text-sm font-medium">{assessment.supplier_name || 'Unknown Supplier'}</p>
                   <p className="text-xs text-gray-500">
                     Due: {format(new Date(assessment.due_date), 'MMM d, yyyy')} • {assessment.assessment_type}
                   </p>

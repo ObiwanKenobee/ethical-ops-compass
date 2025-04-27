@@ -1,4 +1,3 @@
-
 import { supabase } from "@/integrations/supabase/client";
 
 // Interface for dashboard summary data
@@ -39,7 +38,7 @@ export const dashboardService = {
       const { count: activeInitiatives } = await supabase
         .from('esg_initiatives')
         .select('*', { count: 'exact', head: true })
-        .eq('status', 'active');
+        .eq('status', 'in_progress');
 
       // Get pending assessments count
       const { count: pendingAssessments } = await supabase
@@ -188,6 +187,7 @@ export const dashboardService = {
             supplierMap.set(supplier.id, supplier.name);
           });
           
+          // Add supplier_name to each assessment
           return upcomingAssessments.map(assessment => ({
             ...assessment,
             supplier_name: assessment.supplier_id ? 
