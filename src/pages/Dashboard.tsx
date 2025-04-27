@@ -1,11 +1,13 @@
-
 import { useState } from "react";
-import { AlertTriangle, CheckCircle, Clock, Target, Users, Edit, Trash } from "lucide-react";
-import { StatCard } from "@/components/dashboard/StatCard";
+import { DashboardMetrics } from "@/components/dashboard/DashboardMetrics";
 import { OverviewChart } from "@/components/dashboard/OverviewChart";
 import { ComplianceAlerts } from "@/components/dashboard/ComplianceAlerts";
 import { PartnerActivity } from "@/components/dashboard/PartnerActivity";
 import { SdgProgress } from "@/components/dashboard/SdgProgress";
+import { RiskDistributionChart } from "@/components/dashboard/RiskDistributionChart";
+import { TopPartners } from "@/components/dashboard/TopPartners";
+import { RecentInitiatives } from "@/components/dashboard/RecentInitiatives";
+import { UpcomingAssessments } from "@/components/dashboard/UpcomingAssessments";
 import { CrudTable } from "@/components/common/CrudTable";
 import { CrudModal } from "@/components/common/CrudModal";
 import { CrudForm } from "@/components/common/CrudForm";
@@ -62,7 +64,6 @@ const Dashboard = () => {
 
   const handleFormSubmit = (data: Partner) => {
     if (currentPartner) {
-      // Update existing partner
       const updated = dataService.update<Partner>('partners', currentPartner.id, data);
       if (updated) {
         setPartners(dataService.getAll<Partner>('partners'));
@@ -72,7 +73,6 @@ const Dashboard = () => {
         });
       }
     } else {
-      // Create new partner
       const newPartner = dataService.create<Partner>('partners', data);
       setPartners(dataService.getAll<Partner>('partners'));
       toast({
@@ -101,44 +101,11 @@ const Dashboard = () => {
       <div className="flex justify-between items-center">
         <h1 className="text-3xl font-bold tracking-tight">Admin Dashboard</h1>
         <div className="text-sm text-muted-foreground">
-          Last updated: April 22, 2025 • <a href="#" className="text-primary hover:underline">Refresh Data</a>
+          Last updated: {new Date().toLocaleDateString()} • <a href="#" className="text-primary hover:underline">Refresh Data</a>
         </div>
       </div>
       
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-        <StatCard 
-          title="Total Partners" 
-          value={partners.length.toString()} 
-          description="Active organizations in network" 
-          icon={<Users />}
-          trend={8}
-          trendDescription="vs. last quarter"
-        />
-        <StatCard 
-          title="Compliance Score" 
-          value="82%" 
-          description="Network-wide average" 
-          icon={<CheckCircle />}
-          trend={5}
-          trendDescription="vs. last quarter"
-        />
-        <StatCard 
-          title="Open Risks" 
-          value="17" 
-          description="Requiring attention" 
-          icon={<AlertTriangle />}
-          trend={-12}
-          trendDescription="vs. last quarter"
-        />
-        <StatCard 
-          title="Avg. Resolution Time" 
-          value="9.2 days" 
-          description="For critical issues" 
-          icon={<Clock />}
-          trend={-22}
-          trendDescription="vs. last quarter"
-        />
-      </div>
+      <DashboardMetrics />
       
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
         <OverviewChart />
@@ -149,34 +116,45 @@ const Dashboard = () => {
         <PartnerActivity />
       </div>
 
-      <div className="mt-8">
-        <CrudTable
-          title="Partner Management"
-          columns={[
-            { key: 'name', title: 'Partner Name', sortable: true },
-            { key: 'country', title: 'Country', sortable: true },
-            { key: 'industry', title: 'Industry', sortable: true },
-            { key: 'complianceScore', title: 'Compliance', 
-              render: (value) => `${value}%`,
-              sortable: true
-            },
-            { key: 'riskLevel', title: 'Risk Level', 
-              render: renderRiskLevel,
-              sortable: true
-            },
-          ]}
-          data={partners}
-          filterPlaceholder="Search partners..."
-          onCreateClick={handleCreatePartner}
-          onEditClick={handleEditPartner}
-          onDeleteClick={handleDeletePartner}
-          onViewClick={(partner) => {
-            toast({
-              title: "Partner details",
-              description: `Viewing details for ${partner.name}`,
-            });
-          }}
-        />
+      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+        <RecentInitiatives />
+        <UpcomingAssessments />
+        <RiskDistributionChart />
+      </div>
+
+      <div className="grid gap-6 lg:grid-cols-4">
+        <div className="lg:col-span-3">
+          <CrudTable
+            title="Partner Management"
+            columns={[
+              { key: 'name', title: 'Partner Name', sortable: true },
+              { key: 'country', title: 'Country', sortable: true },
+              { key: 'industry', title: 'Industry', sortable: true },
+              { key: 'complianceScore', title: 'Compliance', 
+                render: (value) => `${value}%`,
+                sortable: true
+              },
+              { key: 'riskLevel', title: 'Risk Level', 
+                render: renderRiskLevel,
+                sortable: true
+              },
+            ]}
+            data={partners}
+            filterPlaceholder="Search partners..."
+            onCreateClick={handleCreatePartner}
+            onEditClick={handleEditPartner}
+            onDeleteClick={handleDeletePartner}
+            onViewClick={(partner) => {
+              toast({
+                title: "Partner details",
+                description: `Viewing details for ${partner.name}`,
+              });
+            }}
+          />
+        </div>
+        <div>
+          <TopPartners />
+        </div>
       </div>
 
       <CrudModal
