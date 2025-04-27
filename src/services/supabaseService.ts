@@ -164,7 +164,9 @@ export const dashboardService = {
       
       // Get supplier names
       if (data && data.length > 0) {
-        const supplierIds = data.map(assessment => assessment.supplier_id).filter(Boolean);
+        const supplierIds = data
+          .map(assessment => assessment.supplier_id)
+          .filter(Boolean);
         
         if (supplierIds.length > 0) {
           const { data: suppliers } = await supabase
@@ -177,7 +179,17 @@ export const dashboardService = {
             supplierMap.set(supplier.id, supplier.name);
           });
           
-          return data.map(assessment => ({
+          // Type assertion to handle the error
+          const typedData = data as Array<{
+            id: string;
+            supplier_id: string;
+            assessment_type: string;
+            due_date: string;
+            status: string;
+            supplier_name?: string;
+          }>;
+          
+          return typedData.map(assessment => ({
             ...assessment,
             supplier_name: assessment.supplier_id ? 
               supplierMap.get(assessment.supplier_id) || 'Unknown' : 

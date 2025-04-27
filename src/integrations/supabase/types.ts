@@ -480,6 +480,7 @@ export type Database = {
       esg_initiatives: {
         Row: {
           budget: number | null
+          category: string | null
           created_at: string
           description: string | null
           end_date: string | null
@@ -493,6 +494,7 @@ export type Database = {
         }
         Insert: {
           budget?: number | null
+          category?: string | null
           created_at?: string
           description?: string | null
           end_date?: string | null
@@ -506,6 +508,7 @@ export type Database = {
         }
         Update: {
           budget?: number | null
+          category?: string | null
           created_at?: string
           description?: string | null
           end_date?: string | null
@@ -1481,6 +1484,7 @@ export type Database = {
       }
       supplier_assessments: {
         Row: {
+          assessment_type: string | null
           certification_details: Json | null
           compliance_score: number | null
           contact_information: Json | null
@@ -1497,6 +1501,7 @@ export type Database = {
           user_id: string
         }
         Insert: {
+          assessment_type?: string | null
           certification_details?: Json | null
           compliance_score?: number | null
           contact_information?: Json | null
@@ -1513,6 +1518,7 @@ export type Database = {
           user_id: string
         }
         Update: {
+          assessment_type?: string | null
           certification_details?: Json | null
           compliance_score?: number | null
           contact_information?: Json | null
