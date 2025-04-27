@@ -37,6 +37,22 @@ export const UpcomingAssessments = () => {
     );
   }
 
+  // Function to determine badge color based on status
+  const getBadgeClass = (status: string) => {
+    switch (status) {
+      case "pending":
+        return "bg-amber-100 text-amber-800";
+      case "in_progress":
+        return "bg-blue-100 text-blue-800";
+      case "completed":
+        return "bg-green-100 text-green-800";
+      case "active":
+        return "bg-green-100 text-green-800";
+      default:
+        return "bg-gray-100 text-gray-800";
+    }
+  };
+
   return (
     <Card>
       <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
@@ -58,12 +74,7 @@ export const UpcomingAssessments = () => {
                   </p>
                 </div>
                 <Badge
-                  className={
-                    assessment.status === "pending" ? "bg-amber-100 text-amber-800" :
-                    assessment.status === "in_progress" ? "bg-blue-100 text-blue-800" :
-                    assessment.status === "completed" ? "bg-green-100 text-green-800" :
-                    "bg-gray-100 text-gray-800"
-                  }
+                  className={getBadgeClass(assessment.status)}
                 >
                   {assessment.status.replace('_', ' ')}
                 </Badge>

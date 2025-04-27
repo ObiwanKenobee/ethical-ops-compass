@@ -7,6 +7,9 @@ import { dashboardService } from "@/services/supabaseService";
 import { format } from "date-fns";
 import { Skeleton } from "@/components/ui/skeleton";
 
+// Define types that match what we've seen coming from the database
+type InitiativeStatus = 'active' | 'planned' | 'completed' | 'in_progress' | 'on_hold';
+
 export const RecentInitiatives = () => {
   const { data: initiatives, isLoading } = useQuery({
     queryKey: ['recentInitiatives'],
@@ -37,6 +40,24 @@ export const RecentInitiatives = () => {
     );
   }
 
+  // Function to determine badge color based on status
+  const getBadgeClass = (status: string) => {
+    switch (status) {
+      case "active":
+        return "bg-green-100 text-green-800";
+      case "planned":
+        return "bg-blue-100 text-blue-800";
+      case "completed":
+        return "bg-gray-100 text-gray-800";
+      case "in_progress":
+        return "bg-blue-100 text-blue-800";
+      case "on_hold":
+        return "bg-amber-100 text-amber-800";
+      default:
+        return "bg-amber-100 text-amber-800";
+    }
+  };
+
   return (
     <Card>
       <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
@@ -58,12 +79,7 @@ export const RecentInitiatives = () => {
                   </p>
                 </div>
                 <Badge
-                  className={
-                    initiative.status === "active" ? "bg-green-100 text-green-800" :
-                    initiative.status === "planned" ? "bg-blue-100 text-blue-800" :
-                    initiative.status === "completed" ? "bg-gray-100 text-gray-800" :
-                    "bg-amber-100 text-amber-800"
-                  }
+                  className={getBadgeClass(initiative.status)}
                 >
                   {initiative.status}
                 </Badge>

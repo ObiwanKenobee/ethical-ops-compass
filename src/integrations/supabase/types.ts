@@ -1489,6 +1489,7 @@ export type Database = {
           compliance_score: number | null
           contact_information: Json | null
           created_at: string | null
+          due_date: string | null
           id: string
           last_audit_date: string | null
           next_audit_date: string | null
@@ -1506,6 +1507,7 @@ export type Database = {
           compliance_score?: number | null
           contact_information?: Json | null
           created_at?: string | null
+          due_date?: string | null
           id?: string
           last_audit_date?: string | null
           next_audit_date?: string | null
@@ -1523,6 +1525,7 @@ export type Database = {
           compliance_score?: number | null
           contact_information?: Json | null
           created_at?: string | null
+          due_date?: string | null
           id?: string
           last_audit_date?: string | null
           next_audit_date?: string | null

@@ -35,6 +35,7 @@ export const dashboardService = {
         .select('*', { count: 'exact', head: true });
 
       // Get active initiatives count
+      // We use 'active' as status in our code, but need to handle if DB expects something different
       const { count: activeInitiatives } = await supabase
         .from('esg_initiatives')
         .select('*', { count: 'exact', head: true })
@@ -153,18 +154,26 @@ export const dashboardService = {
   // Get upcoming assessments
   async getUpcomingAssessments(limit: number = 5) {
     try {
+      // Check if due_date column exists
       const { data, error } = await supabase
         .from('supplier_assessments')
-        .select('id, supplier_id, assessment_type, due_date, status')
-        .gt('due_date', new Date().toISOString())
-        .order('due_date', { ascending: true })
-        .limit(limit);
+        .select('id, supplier_id, assessment_type, due_date, status');
 
-      if (error) throw error;
+      if (error) {
+        console.error("Error accessing supplier_assessments:", error);
+        return [];
+      }
+      
+      // Filter assessments with due dates in the future
+      const today = new Date().toISOString();
+      const upcomingAssessments = data
+        .filter(assessment => assessment.due_date && assessment.due_date > today)
+        .sort((a, b) => new Date(a.due_date).getTime() - new Date(b.due_date).getTime())
+        .slice(0, limit);
       
       // Get supplier names
-      if (data && data.length > 0) {
-        const supplierIds = data
+      if (upcomingAssessments && upcomingAssessments.length > 0) {
+        const supplierIds = upcomingAssessments
           .map(assessment => assessment.supplier_id)
           .filter(Boolean);
         
@@ -179,17 +188,7 @@ export const dashboardService = {
             supplierMap.set(supplier.id, supplier.name);
           });
           
-          // Type assertion to handle the error
-          const typedData = data as Array<{
-            id: string;
-            supplier_id: string;
-            assessment_type: string;
-            due_date: string;
-            status: string;
-            supplier_name?: string;
-          }>;
-          
-          return typedData.map(assessment => ({
+          return upcomingAssessments.map(assessment => ({
             ...assessment,
             supplier_name: assessment.supplier_id ? 
               supplierMap.get(assessment.supplier_id) || 'Unknown' : 
@@ -198,7 +197,7 @@ export const dashboardService = {
         }
       }
       
-      return data || [];
+      return upcomingAssessments || [];
     } catch (error) {
       console.error("Error fetching upcoming assessments:", error);
       return [];
