@@ -59,7 +59,7 @@ export const RiskDistributionChart = () => {
                   ))}
                 </Pie>
                 <Tooltip 
-                  formatter={(value, name, props) => [
+                  formatter={(value: number, name, props) => [
                     `Count: ${value} (${((value / totalRisks) * 100).toFixed(1)}%)`, 
                     props.payload.category
                   ]}

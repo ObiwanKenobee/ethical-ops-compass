@@ -485,7 +485,7 @@ export type Database = {
           end_date: string | null
           id: string
           impact_score: number | null
-          start_date: string | null
+          started_at: string | null
           status: Database["public"]["Enums"]["initiative_status"]
           title: string
           updated_at: string
@@ -498,7 +498,7 @@ export type Database = {
           end_date?: string | null
           id?: string
           impact_score?: number | null
-          start_date?: string | null
+          started_at?: string | null
           status?: Database["public"]["Enums"]["initiative_status"]
           title: string
           updated_at?: string
@@ -511,7 +511,7 @@ export type Database = {
           end_date?: string | null
           id?: string
           impact_score?: number | null
-          start_date?: string | null
+          started_at?: string | null
           status?: Database["public"]["Enums"]["initiative_status"]
           title?: string
           updated_at?: string
@@ -907,6 +907,7 @@ export type Database = {
       }
       partners: {
         Row: {
+          compliance_score: number | null
           contact_email: string | null
           created_at: string
           description: string | null
@@ -921,6 +922,7 @@ export type Database = {
           website_url: string | null
         }
         Insert: {
+          compliance_score?: number | null
           contact_email?: string | null
           created_at?: string
           description?: string | null
@@ -935,6 +937,7 @@ export type Database = {
           website_url?: string | null
         }
         Update: {
+          compliance_score?: number | null
           contact_email?: string | null
           created_at?: string
           description?: string | null
@@ -1486,7 +1489,9 @@ export type Database = {
           last_audit_date: string | null
           next_audit_date: string | null
           risk_areas: string[] | null
+          score: number | null
           status: Database["public"]["Enums"]["supplier_status"] | null
+          supplier_id: string | null
           supplier_name: string
           updated_at: string | null
           user_id: string
@@ -1500,7 +1505,9 @@ export type Database = {
           last_audit_date?: string | null
           next_audit_date?: string | null
           risk_areas?: string[] | null
+          score?: number | null
           status?: Database["public"]["Enums"]["supplier_status"] | null
+          supplier_id?: string | null
           supplier_name: string
           updated_at?: string | null
           user_id: string
@@ -1514,7 +1521,9 @@ export type Database = {
           last_audit_date?: string | null
           next_audit_date?: string | null
           risk_areas?: string[] | null
+          score?: number | null
           status?: Database["public"]["Enums"]["supplier_status"] | null
+          supplier_id?: string | null
           supplier_name?: string
           updated_at?: string | null
           user_id?: string

@@ -163,21 +163,30 @@ export const dashboardService = {
       if (error) throw error;
       
       // Get supplier names
-      const supplierIds = data?.map(assessment => assessment.supplier_id) || [];
-      const { data: suppliers } = await supabase
-        .from('suppliers')
-        .select('id, name')
-        .in('id', supplierIds);
+      if (data && data.length > 0) {
+        const supplierIds = data.map(assessment => assessment.supplier_id).filter(Boolean);
+        
+        if (supplierIds.length > 0) {
+          const { data: suppliers } = await supabase
+            .from('suppliers')
+            .select('id, name')
+            .in('id', supplierIds);
+          
+          const supplierMap = new Map();
+          suppliers?.forEach(supplier => {
+            supplierMap.set(supplier.id, supplier.name);
+          });
+          
+          return data.map(assessment => ({
+            ...assessment,
+            supplier_name: assessment.supplier_id ? 
+              supplierMap.get(assessment.supplier_id) || 'Unknown' : 
+              'Unknown'
+          }));
+        }
+      }
       
-      const supplierMap = new Map();
-      suppliers?.forEach(supplier => {
-        supplierMap.set(supplier.id, supplier.name);
-      });
-      
-      return data?.map(assessment => ({
-        ...assessment,
-        supplier_name: supplierMap.get(assessment.supplier_id) || 'Unknown'
-      })) || [];
+      return data || [];
     } catch (error) {
       console.error("Error fetching upcoming assessments:", error);
       return [];

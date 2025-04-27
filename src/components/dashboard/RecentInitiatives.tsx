@@ -54,7 +54,7 @@ export const RecentInitiatives = () => {
                 <div className="space-y-1">
                   <p className="text-sm font-medium">{initiative.title}</p>
                   <p className="text-xs text-gray-500">
-                    Started {format(new Date(initiative.started_at), 'MMM d, yyyy')} • {initiative.category}
+                    Started {initiative.started_at ? format(new Date(initiative.started_at), 'MMM d, yyyy') : 'N/A'} • {initiative.category || 'General'}
                   </p>
                 </div>
                 <Badge
