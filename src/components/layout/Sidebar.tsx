@@ -1,19 +1,16 @@
 
 import { ReactNode } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { 
-  Book, 
-  Calendar, 
   Home, 
-  Search,
-  MessageSquare, 
-  FilesIcon,
-  Folder,
   Users,
-  Shield, 
+  Folder,
   AlertTriangle, 
   CheckCircle,
+  MessageSquare, 
+  BookOpen,
   Globe,
+  Shield, 
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
@@ -29,6 +26,8 @@ interface SidebarItem {
 }
 
 export const Sidebar = ({ collapsed, setCollapsed }: SidebarProps) => {
+  const location = useLocation();
+  
   const mainItems: SidebarItem[] = [
     { name: 'Dashboard', path: '/', icon: <Home className="h-5 w-5" /> },
     { name: 'Onboarding', path: '/onboarding', icon: <Users className="h-5 w-5" /> },
@@ -39,9 +38,17 @@ export const Sidebar = ({ collapsed, setCollapsed }: SidebarProps) => {
   ];
 
   const insightItems: SidebarItem[] = [
-    { name: 'Case Studies', path: '/case-studies', icon: <Book className="h-5 w-5" /> },
+    { name: 'Case Studies', path: '/case-studies', icon: <BookOpen className="h-5 w-5" /> },
     { name: 'SDG Dashboard', path: '/sdg-dashboard', icon: <Globe className="h-5 w-5" /> },
   ];
+
+  // Active path check
+  const isActivePath = (path: string): boolean => {
+    if (path === '/' && location.pathname === '/') {
+      return true;
+    }
+    return location.pathname.startsWith(path) && path !== '/';
+  };
 
   return (
     <div 
@@ -70,14 +77,14 @@ export const Sidebar = ({ collapsed, setCollapsed }: SidebarProps) => {
                 to={item.path}
                 className={cn(
                   "flex items-center py-2 px-3 rounded-md hover:bg-gray-100 transition-colors",
-                  window.location.pathname === item.path ? "bg-gray-100 font-medium" : ""
+                  isActivePath(item.path) ? "bg-gray-100 font-medium" : ""
                 )}
               >
-                <div className={cn("text-gray-500", window.location.pathname === item.path ? "text-primary" : "")}>
+                <div className={cn("text-gray-500", isActivePath(item.path) ? "text-primary" : "")}>
                   {item.icon}
                 </div>
                 {!collapsed && (
-                  <span className={cn("ml-3", window.location.pathname === item.path ? "text-primary" : "")}>
+                  <span className={cn("ml-3", isActivePath(item.path) ? "text-primary" : "")}>
                     {item.name}
                   </span>
                 )}
@@ -96,14 +103,14 @@ export const Sidebar = ({ collapsed, setCollapsed }: SidebarProps) => {
                   to={item.path}
                   className={cn(
                     "flex items-center py-2 px-3 rounded-md hover:bg-gray-100 transition-colors",
-                    window.location.pathname === item.path ? "bg-gray-100 font-medium" : ""
+                    isActivePath(item.path) ? "bg-gray-100 font-medium" : ""
                   )}
                 >
-                  <div className={cn("text-gray-500", window.location.pathname === item.path ? "text-primary" : "")}>
+                  <div className={cn("text-gray-500", isActivePath(item.path) ? "text-primary" : "")}>
                     {item.icon}
                   </div>
                   {!collapsed && (
-                    <span className={cn("ml-3", window.location.pathname === item.path ? "text-primary" : "")}>
+                    <span className={cn("ml-3", isActivePath(item.path) ? "text-primary" : "")}>
                       {item.name}
                     </span>
                   )}

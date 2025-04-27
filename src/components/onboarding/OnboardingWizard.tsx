@@ -1,99 +1,116 @@
 
 import { useState } from "react";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Progress } from "@/components/ui/progress";
 import { RegionIndustryStep } from "./RegionIndustryStep";
-import { LegalRequirementsStep } from "./LegalRequirementsStep";
 import { SupplyChainStep } from "./SupplyChainStep";
+import { LegalRequirementsStep } from "./LegalRequirementsStep";
 import { ReportStep } from "./ReportStep";
-import { Check } from "lucide-react";
-import { toast } from "sonner";
 
-const steps = [
-  { id: 1, name: "Region & Industry" },
-  { id: 2, name: "Legal Requirements" },
-  { id: 3, name: "Supply Chain Declaration" },
-  { id: 4, name: "Generated Report" },
-];
+enum WizardStep {
+  RegionIndustry = 0,
+  SupplyChain = 1,
+  LegalRequirements = 2,
+  Report = 3,
+  Complete = 4
+}
 
 export const OnboardingWizard = () => {
-  const [currentStep, setCurrentStep] = useState(1);
-  
-  const progress = Math.round((currentStep / steps.length) * 100);
-  
+  const [currentStep, setCurrentStep] = useState<WizardStep>(WizardStep.RegionIndustry);
+  const [formData, setFormData] = useState({
+    region: "",
+    industry: "",
+    supplierCount: 0,
+    supplierRegions: [],
+    complianceFrameworks: [],
+  });
+
   const handleNext = () => {
-    if (currentStep < steps.length) {
-      setCurrentStep(currentStep + 1);
-      toast.success("Step completed successfully!");
-    }
+    window.scrollTo(0, 0);
+    setCurrentStep(prev => Math.min(prev + 1, WizardStep.Complete));
   };
-  
+
   const handleBack = () => {
-    if (currentStep > 1) {
-      setCurrentStep(currentStep - 1);
-    }
+    window.scrollTo(0, 0);
+    setCurrentStep(prev => Math.max(prev - 1, WizardStep.RegionIndustry));
   };
-  
-  const renderStep = () => {
-    switch (currentStep) {
-      case 1:
-        return <RegionIndustryStep onNext={handleNext} />;
-      case 2:
-        return <LegalRequirementsStep onNext={handleNext} onBack={handleBack} />;
-      case 3:
-        return <SupplyChainStep onNext={handleNext} onBack={handleBack} />;
-      case 4:
-        return <ReportStep onBack={handleBack} />;
-      default:
-        return null;
-    }
+
+  const updateFormData = (data: Partial<typeof formData>) => {
+    setFormData(prev => ({ ...prev, ...data }));
   };
-  
+
   return (
-    <div className="max-w-4xl mx-auto">
-      <Card className="border-none shadow-md">
-        <CardHeader className="text-center pb-4">
-          <CardTitle className="text-2xl">Ethical Compliance Starter Kit</CardTitle>
-          <CardDescription>Complete the steps below to setup compliance for your organization</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <div className="mb-8">
-            <div className="flex justify-between mb-2">
-              {steps.map((step) => (
-                <div 
-                  key={step.id} 
-                  className="flex flex-col items-center space-y-1"
-                  style={{ width: `${100 / steps.length}%` }}
-                >
-                  <div 
-                    className={`h-8 w-8 rounded-full flex items-center justify-center border-2 ${
-                      step.id < currentStep
-                        ? "bg-primary border-primary text-white"
-                        : step.id === currentStep
-                        ? "border-primary text-primary"
-                        : "border-gray-300 text-gray-400"
-                    }`}
-                  >
-                    {step.id < currentStep ? (
-                      <Check className="h-4 w-4" />
-                    ) : (
-                      step.id
-                    )}
-                  </div>
-                  <span className={`text-xs ${
-                    step.id <= currentStep ? "text-primary font-medium" : "text-gray-500"
-                  }`}>
-                    {step.name}
-                  </span>
-                </div>
-              ))}
-            </div>
-            <Progress value={progress} className="h-1" />
+    <div className="max-w-3xl mx-auto">
+      <Card className="p-6">
+        <div className="mb-6">
+          <div className="flex justify-between mb-2">
+            {[...Array(4)].map((_, i) => (
+              <div 
+                key={i} 
+                className={`w-1/4 h-2 rounded-full mx-1 ${i <= currentStep ? 'bg-primary' : 'bg-gray-200'}`}
+              />
+            ))}
           </div>
-          
-          {renderStep()}
-        </CardContent>
+          <div className="flex justify-between text-xs text-gray-500">
+            <div>Region & Industry</div>
+            <div>Supply Chain</div>
+            <div>Legal Requirements</div>
+            <div>AI Report</div>
+          </div>
+        </div>
+        
+        {currentStep === WizardStep.RegionIndustry && (
+          <RegionIndustryStep 
+            data={formData}
+            onUpdate={updateFormData}
+          />
+        )}
+        
+        {currentStep === WizardStep.SupplyChain && (
+          <SupplyChainStep
+            data={formData}
+            onUpdate={updateFormData}
+          />
+        )}
+        
+        {currentStep === WizardStep.LegalRequirements && (
+          <LegalRequirementsStep
+            data={formData}
+            onUpdate={updateFormData}
+          />
+        )}
+        
+        {currentStep === WizardStep.Report && (
+          <ReportStep
+            data={formData}
+          />
+        )}
+        
+        {currentStep === WizardStep.Complete && (
+          <div className="text-center py-8">
+            <h2 className="text-2xl font-bold mb-4">Onboarding Complete!</h2>
+            <p className="mb-6">Your organization has been successfully onboarded to EthicalOps.</p>
+            <Button onClick={() => window.location.href = "/"}>
+              Go to Dashboard
+            </Button>
+          </div>
+        )}
+        
+        <div className="flex justify-between mt-6">
+          <Button
+            variant="outline"
+            onClick={handleBack}
+            disabled={currentStep === WizardStep.RegionIndustry}
+          >
+            Back
+          </Button>
+          <Button
+            onClick={handleNext}
+            disabled={currentStep === WizardStep.Complete}
+          >
+            {currentStep === WizardStep.Report ? "Complete" : "Next"}
+          </Button>
+        </div>
       </Card>
     </div>
   );
