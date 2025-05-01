@@ -1,5 +1,5 @@
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -24,13 +24,21 @@ const industries = [
   { value: "healthcare", label: "Healthcare & Pharmaceuticals" },
 ];
 
-interface RegionIndustryStepProps {
+export interface RegionIndustryStepProps {
+  region: string;
+  industry: string;
   onNext: () => void;
+  onChange: (data: { region?: string; industry?: string }) => void;
 }
 
-export const RegionIndustryStep = ({ onNext }: RegionIndustryStepProps) => {
-  const [region, setRegion] = useState("");
-  const [industry, setIndustry] = useState("");
+export const RegionIndustryStep = ({ region, industry, onNext, onChange }: RegionIndustryStepProps) => {
+  const handleRegionChange = (value: string) => {
+    onChange({ region: value });
+  };
+
+  const handleIndustryChange = (value: string) => {
+    onChange({ industry: value });
+  };
   
   return (
     <div className="space-y-6 py-4">
@@ -42,7 +50,7 @@ export const RegionIndustryStep = ({ onNext }: RegionIndustryStepProps) => {
         <p className="text-sm text-gray-500 mb-2">
           Choose the region where most of your operations take place. This will determine applicable regulations.
         </p>
-        <Select value={region} onValueChange={setRegion}>
+        <Select value={region} onValueChange={handleRegionChange}>
           <SelectTrigger className="w-full">
             <SelectValue placeholder="Select a region" />
           </SelectTrigger>
@@ -64,7 +72,7 @@ export const RegionIndustryStep = ({ onNext }: RegionIndustryStepProps) => {
         <p className="text-sm text-gray-500 mb-2">
           Choose your primary industry. We'll customize compliance requirements accordingly.
         </p>
-        <Select value={industry} onValueChange={setIndustry}>
+        <Select value={industry} onValueChange={handleIndustryChange}>
           <SelectTrigger className="w-full">
             <SelectValue placeholder="Select an industry" />
           </SelectTrigger>

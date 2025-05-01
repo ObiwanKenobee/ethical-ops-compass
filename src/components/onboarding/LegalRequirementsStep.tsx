@@ -43,7 +43,7 @@ const requirements: Requirement[] = [
   },
 ];
 
-interface LegalRequirementsStepProps {
+export interface LegalRequirementsStepProps {
   onNext: () => void;
   onBack: () => void;
 }

@@ -61,28 +61,30 @@ export const OnboardingWizard = () => {
         
         {currentStep === WizardStep.RegionIndustry && (
           <RegionIndustryStep 
-            data={formData}
-            onUpdate={updateFormData}
+            region={formData.region}
+            industry={formData.industry}
+            onNext={handleNext}
+            onChange={updateFormData}
           />
         )}
         
         {currentStep === WizardStep.SupplyChain && (
           <SupplyChainStep
-            data={formData}
-            onUpdate={updateFormData}
+            onNext={handleNext}
+            onBack={handleBack}
           />
         )}
         
         {currentStep === WizardStep.LegalRequirements && (
           <LegalRequirementsStep
-            data={formData}
-            onUpdate={updateFormData}
+            onNext={handleNext}
+            onBack={handleBack}
           />
         )}
         
         {currentStep === WizardStep.Report && (
           <ReportStep
-            data={formData}
+            onBack={handleBack}
           />
         )}
         
@@ -96,21 +98,26 @@ export const OnboardingWizard = () => {
           </div>
         )}
         
-        <div className="flex justify-between mt-6">
-          <Button
-            variant="outline"
-            onClick={handleBack}
-            disabled={currentStep === WizardStep.RegionIndustry}
-          >
-            Back
-          </Button>
-          <Button
-            onClick={handleNext}
-            disabled={currentStep === WizardStep.Complete}
-          >
-            {currentStep === WizardStep.Report ? "Complete" : "Next"}
-          </Button>
-        </div>
+        {currentStep !== WizardStep.RegionIndustry && 
+         currentStep !== WizardStep.SupplyChain && 
+         currentStep !== WizardStep.LegalRequirements && 
+         currentStep !== WizardStep.Report && (
+          <div className="flex justify-between mt-6">
+            <Button
+              variant="outline"
+              onClick={handleBack}
+              disabled={currentStep === WizardStep.RegionIndustry}
+            >
+              Back
+            </Button>
+            <Button
+              onClick={handleNext}
+              disabled={currentStep === WizardStep.Complete}
+            >
+              {currentStep === WizardStep.Report ? "Complete" : "Next"}
+            </Button>
+          </div>
+        )}
       </Card>
     </div>
   );

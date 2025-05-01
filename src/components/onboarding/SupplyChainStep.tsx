@@ -19,7 +19,7 @@ const countries = [
   "Indonesia", "Brazil", "Mexico", "Thailand", "Malaysia"
 ];
 
-interface SupplyChainStepProps {
+export interface SupplyChainStepProps {
   onNext: () => void;
   onBack: () => void;
 }
